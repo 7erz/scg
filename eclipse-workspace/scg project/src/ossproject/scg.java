@@ -88,7 +88,11 @@ JPanel btnpnl = new JPanel();
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
 			
+			
 			pnl.setBackground(Color.red);
+			JLabel load = new JLabel(loading);
+			pnl.add(load);
+			c.add(pnl);
 			
 			
 			c.add(pnl);
