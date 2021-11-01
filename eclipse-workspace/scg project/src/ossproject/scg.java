@@ -60,7 +60,7 @@ JPanel btnpnl = new JPanel();
 		c.add(btnpnl);
 		
 		
-		setSize(1280,720);
+		setSize(1280,720); 
 		setVisible(true);
 			
 	}
@@ -77,32 +77,98 @@ JPanel btnpnl = new JPanel();
 	}
 	
 	class First extends JFrame{
-		JPanel pnl = new JPanel();
-		JButton start = new JButton();
-		JButton exit = new JButton();
-		
-		private ImageIcon loading = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
+		JPanel backpnl;
+		JPanel fpnl[];
+		JLabel flbl[];
+		JButton fbtn[];
+		JTextField name;
+		//JTextField name = new JTextField(5);
+		ImageIcon loading = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading2.gif");
 		
 		First(){
 			super("시작");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
 			
+			backpnl = new JPanel();
+			//backpnl.setBackground(Color.red);
 			
-			pnl.setBackground(Color.red);
-			JLabel load = new JLabel(loading);
-			pnl.add(load);
-			c.add(pnl);
+			c.setBackground(red);
 			
+			setComp();
+			addComp();
+			addEvent();
 			
-			c.add(pnl);
+			c.add(backpnl);
 			setSize(1280,720);
 			setVisible(true);
+		}
+		void setComp() {
+			name = new JTextField(7);
+			fpnl = new JPanel[3];
+			flbl = new JLabel[3];
+			fbtn = new JButton[2];
+			for(int i = 0; i < 3; i++) {
+				fpnl[i] = new JPanel();
+				flbl[i] = new JLabel();
+				if(i <2) {
+					fbtn[i] = new JButton();
+				}
+				
+			}
+			flbl[0].setText("이름");
+			flbl[1].setIcon(loading);
+			fbtn[0].setText("시작");
+			fbtn[1].setText("종료");
 			
+		}
+		void addComp() {
+			add(fpnl[0], BorderLayout.NORTH);
+			add(fpnl[1], BorderLayout.CENTER);
+			add(fpnl[2], BorderLayout.SOUTH);
+			
+			fpnl[0].add(flbl[1]);
+			fpnl[0].setBackground(Color.RED);
+			
+			fpnl[1].add(flbl[0]);
+			fpnl[1].add(name);
+			fpnl[1].setBackground(Color.RED);
+			
+			fpnl[2].add(fbtn[0]);
+			fpnl[2].add(fbtn[1]);
+			
+		}
 		
+		void addEvent() {
+			
+			fbtn[0].addActionListener(new StartHandler());
+			fbtn[1].addActionListener(new CantcancelHandler());
+		}
 		
+		class StartHandler implements ActionListener{
+			
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==fbtn[0]) {
+					for(int i = 0; i < 3; i++) {
+						fpnl[i].setVisible(false);
+					}
+					
+				}
+			}
+		}
+		class CantcancelHandler implements ActionListener{
+			
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==fbtn[1]) {
+					JOptionPane.showMessageDialog(null, "Bad 이벤트 추가 할것");
+				}
+			}
 		}
 	}
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		new scg();
