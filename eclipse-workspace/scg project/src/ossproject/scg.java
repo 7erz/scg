@@ -10,7 +10,7 @@ import java.awt.event.*;
 // 첫번쨰는 간단한 틀과 화면 전환
 // 두번쨰는 퀴즈들의 내용들과 처리
 // 세번쨰로는 음악과 사운드 추가
-// 마지막으로 기말 전까지 세세한것을 다듬을 것
+// 마지막으로 기말 전까지 세세한것을 다듬을 것 (밈 관련 게임이라 다듬지 않는것도 생각하고 있음)
 public class scg extends JFrame implements ActionListener{
 Container c = getContentPane();
 Font Bold = new Font("궁서체",Font.BOLD,60);
@@ -171,14 +171,42 @@ JPanel btnpnl = new JPanel();
 			//종료 안되는 종료 버튼 ( 패널티 부여 )
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==fbtn[1]) {
-					JOptionPane.showMessageDialog(null, nametxt.getText()+"님 종료는 못하십니다.");
+					//새창(패널티창)을 띄우고 경고문을 추가로 띄움
+					new PenaltyImage();
+					JOptionPane.showMessageDialog(null, nametxt.getText()+"님 종료는 못하십니다.", "Warning!!", JOptionPane.ERROR_MESSAGE);
+					
 				}
 			}
 		}
 	}
-	
-	
-	
+	//실점,패널티용 경고 프레임
+	class PenaltyImage extends JFrame{
+		JFrame penalty = new JFrame();
+		public PenaltyImage() {
+			//사이즈 구하기
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			penalty.setUndecorated(true);
+			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+			JLabel warnlbl = new JLabel(image);
+			penalty.getContentPane().add(warnlbl);
+			penalty.setSize(image.getIconWidth(), image.getIconHeight());
+			//가로 세로 창을 놓을 곳 배치
+			int x = (screenSize.width - penalty.getSize().width)/2;
+			int y = (screenSize.height - penalty.getSize().height)/2;
+			penalty.setLocation(x, y);
+			penalty.setVisible(true);
+			//버튼으로 패널티창 상호작용
+			penalty.addKeyListener(new ExitWarningListener());
+		}
+		//escape 키로 창 닫기
+		class ExitWarningListener extends KeyAdapter {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					penalty.setVisible(false);
+				}
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) {
