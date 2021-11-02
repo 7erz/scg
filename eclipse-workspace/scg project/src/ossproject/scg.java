@@ -77,34 +77,33 @@ JPanel btnpnl = new JPanel();
 	}
 	
 	class First extends JFrame{
-		JPanel backpnl;
+		//상단창 프레임 제거 (예정)
+		Frame frame = new Frame();
 		JPanel fpnl[];
 		JLabel flbl[];
 		JButton fbtn[];
-		JTextField name;
+		JTextField nametxt;
 		//JTextField name = new JTextField(5);
 		ImageIcon loading = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading2.gif");
 		
 		First(){
 			super("시작");
+			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
-			
-			backpnl = new JPanel();
-			//backpnl.setBackground(Color.red);
-			
-			c.setBackground(red);
+			//이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
+			//c.setBackground(red);
 			
 			setComp();
 			addComp();
 			addEvent();
 			
-			c.add(backpnl);
+
 			setSize(1280,720);
 			setVisible(true);
 		}
 		void setComp() {
-			name = new JTextField(7);
+			nametxt = new JTextField(7);
 			fpnl = new JPanel[3];
 			flbl = new JLabel[3];
 			fbtn = new JButton[2];
@@ -116,37 +115,41 @@ JPanel btnpnl = new JPanel();
 				}
 				
 			}
+			//라벨설정(0은 이름 칸 추가,1에는 로고 추가)
 			flbl[0].setText("이름");
 			flbl[1].setIcon(loading);
+			flbl[1].setHorizontalAlignment(WIDTH/2); 
+			//버튼 설정
 			fbtn[0].setText("시작");
 			fbtn[1].setText("종료");
 			
 		}
 		void addComp() {
+			//패널 배치
 			add(fpnl[0], BorderLayout.NORTH);
 			add(fpnl[1], BorderLayout.CENTER);
 			add(fpnl[2], BorderLayout.SOUTH);
-			
+			//로고라벨을 패널0에 추가
 			fpnl[0].add(flbl[1]);
 			fpnl[0].setBackground(Color.RED);
-			
-			fpnl[1].add(flbl[0]);
-			fpnl[1].add(name);
+			//이름 칸을 패널1에 추가
+			fpnl[1].add(new Label("성함"));
+			fpnl[1].add(nametxt);
 			fpnl[1].setBackground(Color.RED);
-			
+			//버튼 추가
 			fpnl[2].add(fbtn[0]);
 			fpnl[2].add(fbtn[1]);
 			
 		}
 		
 		void addEvent() {
-			
+			//버튼 리스너 추가
 			fbtn[0].addActionListener(new StartHandler());
 			fbtn[1].addActionListener(new CantcancelHandler());
 		}
 		
 		class StartHandler implements ActionListener{
-			
+			//시작버튼
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==fbtn[0]) {
 					for(int i = 0; i < 3; i++) {
@@ -157,10 +160,10 @@ JPanel btnpnl = new JPanel();
 			}
 		}
 		class CantcancelHandler implements ActionListener{
-			
+			//종료 안되는 종료 버튼
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==fbtn[1]) {
-					JOptionPane.showMessageDialog(null, "Bad 이벤트 추가 할것");
+					JOptionPane.showMessageDialog(null, nametxt.getText()+"님 종료는 못하십니다.");
 				}
 			}
 		}
