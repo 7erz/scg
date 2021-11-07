@@ -101,7 +101,7 @@ JPanel btnpnl = new JPanel();
 			Container c = getContentPane();
 			//이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
 			//c.setBackground(red);
-			
+			setUndecorated(true);
 			setComp();
 			addComp();
 			addEvent();
