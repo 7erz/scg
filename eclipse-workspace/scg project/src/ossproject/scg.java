@@ -1,6 +1,7 @@
 package ossproject;
 import javax.swing.*;
 import java.awt.font.*;
+import java.io.File;
 import java.awt.*;
 import java.awt.event.*;
 //9월 30일 시작
@@ -66,7 +67,8 @@ JPanel btnpnl = new JPanel();
 		btnpnl.add(btno);
 		c.add(warnpnl);
 		c.add(btnpnl);
-		
+		Music lobby = new Music("LOBBY.mp3", true);
+		lobby.start();
 		
 		setSize(1280,720); 
 		setVisible(true);
@@ -93,10 +95,8 @@ JPanel btnpnl = new JPanel();
 		JTextField nametxt;
 		//JTextField name = new JTextField(5);
 		ImageIcon loading = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading2.gif");
-		
 		First(){
 			super("시작");
-			
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
 			//이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
