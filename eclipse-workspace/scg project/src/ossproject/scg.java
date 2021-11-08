@@ -2,6 +2,7 @@ package ossproject;
 import javax.swing.*;
 import java.awt.font.*;
 import java.io.File;
+import java.util.Random;
 import java.awt.*;
 import java.awt.event.*;
 //9월 30일 시작
@@ -84,6 +85,10 @@ JPanel btnpnl = new JPanel();
 			setVisible(false);
 		}
 	}
+	
+	
+	
+	
 	//10월 28일 시작
 	class First extends JFrame{
 		//상단창 프레임 제거
@@ -92,9 +97,14 @@ JPanel btnpnl = new JPanel();
 		JPanel fpnl[];
 		JLabel flbl[];
 		JButton fbtn[];
-		
-		
 		JTextField nametxt;
+		//인게임 패널, 라벨, 버튼 지정
+		JPanel gpnl[];
+		JLabel glbl[];
+		JButton gbtn[];
+		//문제 랜덤으로 제공하기
+		Random rd = new Random();
+		String[] q = new String[10]; //문제리스트 참고해서 다시 올릴것
 		//JTextField name = new JTextField(5);
 		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/logotest1.jpg");
 		ImageIcon left = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
@@ -113,8 +123,7 @@ JPanel btnpnl = new JPanel();
 			setComp();
 			addComp();
 			addEvent();
-			//인게임 설정
-			setGameComp();
+
 			//LGPL 라이센스
 			lobby.start();
 
@@ -184,7 +193,9 @@ JPanel btnpnl = new JPanel();
 					for(int i = 0; i < 5; i++) {
 						fpnl[i].setVisible(false);
 					}
-					
+					//인게임 설정
+					setGameComp();
+					getGameComp();
 				}
 			}
 		}
@@ -200,6 +211,19 @@ JPanel btnpnl = new JPanel();
 			}
 		}
 		void setGameComp() {
+			gpnl = new JPanel[3];
+			glbl = new JLabel[3];
+			gbtn = new JButton[2];
+			for(int i = 0; i < 3; i++) {
+				gpnl[i] = new JPanel();
+				glbl[i] = new JLabel();
+				if(i <2) {
+					gbtn[i] = new JButton();
+				}
+			}
+		}
+		
+		void getGameComp() {
 			
 		}
 	}
