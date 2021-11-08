@@ -67,8 +67,7 @@ JPanel btnpnl = new JPanel();
 		btnpnl.add(btno);
 		c.add(warnpnl);
 		c.add(btnpnl);
-		Music lobby = new Music("LOBBY.mp3", true);
-		lobby.start();
+		
 		
 		setSize(1280,720); 
 		setVisible(true);
@@ -105,7 +104,8 @@ JPanel btnpnl = new JPanel();
 			setComp();
 			addComp();
 			addEvent();
-			
+			Music lobby = new Music("LOBBY.mp3", true);
+			lobby.start();
 
 			setSize(1280,720);
 			setVisible(true);
@@ -145,6 +145,7 @@ JPanel btnpnl = new JPanel();
 			fpnl[1].add(nametxt);
 			fpnl[1].setBackground(Color.RED);
 			//버튼 추가
+			fpnl[2].setBackground(Color.red);
 			fpnl[2].add(fbtn[0]);
 			fpnl[2].add(fbtn[1]);
 			
