@@ -86,14 +86,22 @@ JPanel btnpnl = new JPanel();
 	}
 	//10월 28일 시작
 	class First extends JFrame{
-		//상단창 프레임 제거 (예정)
+		//상단창 프레임 제거
 		Frame frame = new Frame();
+		//게임 로비 패널, 라벨, 버튼 지정
 		JPanel fpnl[];
 		JLabel flbl[];
 		JButton fbtn[];
+		
+		
 		JTextField nametxt;
 		//JTextField name = new JTextField(5);
-		ImageIcon loading = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading2.gif");
+		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/logotest1.jpg");
+		ImageIcon left = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
+		ImageIcon right = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
+		//LGPL라이센스 JLayer
+		Music lobby = new Music("LOBBY.mp3", true);
+		Music ingame = new Music("ingame.mp3", true);
 		First(){
 			super("시작");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,10 +109,13 @@ JPanel btnpnl = new JPanel();
 			//이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
 			//c.setBackground(red);
 			setUndecorated(true);
+			//게임 로비 설정
 			setComp();
 			addComp();
 			addEvent();
-			Music lobby = new Music("LOBBY.mp3", true);
+			//인게임 설정
+			setGameComp();
+			//LGPL 라이센스
 			lobby.start();
 
 			setSize(1280,720);
@@ -112,10 +123,10 @@ JPanel btnpnl = new JPanel();
 		}
 		void setComp() {
 			nametxt = new JTextField(7);
-			fpnl = new JPanel[3];
-			flbl = new JLabel[3];
+			fpnl = new JPanel[5];
+			flbl = new JLabel[5];
 			fbtn = new JButton[2];
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < 5; i++) {
 				fpnl[i] = new JPanel();
 				flbl[i] = new JLabel();
 				if(i <2) {
@@ -125,11 +136,13 @@ JPanel btnpnl = new JPanel();
 			}
 			//라벨설정(0은 이름 칸 추가,1에는 로고 추가)
 			flbl[0].setText("이름");
-			flbl[1].setIcon(loading);
-			flbl[1].setHorizontalAlignment(WIDTH/2); 
+			flbl[1].setIcon(lobbyimg);
+			flbl[2].setIcon(left);
+			flbl[3].setIcon(right);
 			//버튼 설정
 			fbtn[0].setText("시작");
 			fbtn[1].setText("종료");
+
 			
 		}
 		void addComp() {
@@ -137,6 +150,8 @@ JPanel btnpnl = new JPanel();
 			add(fpnl[0], BorderLayout.NORTH);
 			add(fpnl[1], BorderLayout.CENTER);
 			add(fpnl[2], BorderLayout.SOUTH);
+			add(fpnl[3], BorderLayout.WEST);
+			add(fpnl[4], BorderLayout.EAST);
 			//로고라벨을 패널0에 추가
 			fpnl[0].add(flbl[1]);
 			fpnl[0].setBackground(Color.RED);
@@ -148,6 +163,9 @@ JPanel btnpnl = new JPanel();
 			fpnl[2].setBackground(Color.red);
 			fpnl[2].add(fbtn[0]);
 			fpnl[2].add(fbtn[1]);
+			//양옆 사진 추가
+			fpnl[3].add(flbl[2]);
+			fpnl[4].add(flbl[3]);
 			
 		}
 		
@@ -161,7 +179,9 @@ JPanel btnpnl = new JPanel();
 			//시작버튼, 화면 전환 필요함
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==fbtn[0]) {
-					for(int i = 0; i < 3; i++) {
+					lobby.stop();
+					ingame.start();
+					for(int i = 0; i < 5; i++) {
 						fpnl[i].setVisible(false);
 					}
 					
@@ -174,10 +194,13 @@ JPanel btnpnl = new JPanel();
 				if(e.getSource()==fbtn[1]) {
 					//새창(패널티창)을 띄우고 경고문을 추가로 띄움
 					new PenaltyImage();
-					JOptionPane.showMessageDialog(null, nametxt.getText()+"님 종료는 못하십니다.", "Warning!!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, nametxt.getText()+"동지 교육을 똑바로 들으시오!", "Warning!!", JOptionPane.ERROR_MESSAGE);
 					
 				}
 			}
+		}
+		void setGameComp() {
+			
 		}
 	}
 	//실점,패널티용 경고 프레임
