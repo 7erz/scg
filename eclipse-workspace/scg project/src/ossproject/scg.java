@@ -104,7 +104,14 @@ JPanel btnpnl = new JPanel();
 		JButton gbtn[];
 		//문제 랜덤으로 제공하기
 		Random rd = new Random();
-		String[] q = new String[10]; //문제리스트 참고해서 다시 올릴것
+		String[] quiz = new String[10]; //문제리스트 참고해서 다시 올릴것
+		String[] c1 = new String[10];	//1번 문항
+		String[] c2 = new String[10];	//2번 문항
+		String[] c3 = new String[10];	//3번 문항(할수 있으면 추가)
+		int ran = rd.nextInt(quiz.length);
+		int answer = 0;
+		int score = 0;
+		int[] ans = new int[10]; //정답의 갯수
 		//JTextField name = new JTextField(5);
 		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/logotest1.jpg");
 		ImageIcon left = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
@@ -195,7 +202,8 @@ JPanel btnpnl = new JPanel();
 					}
 					//인게임 설정
 					setGameComp();
-					getGameComp();
+					addGameComp();
+					
 				}
 			}
 		}
@@ -213,18 +221,38 @@ JPanel btnpnl = new JPanel();
 		void setGameComp() {
 			gpnl = new JPanel[3];
 			glbl = new JLabel[3];
-			gbtn = new JButton[2];
+			gbtn = new JButton[3];
 			for(int i = 0; i < 3; i++) {
 				gpnl[i] = new JPanel();
 				glbl[i] = new JLabel();
-				if(i <2) {
-					gbtn[i] = new JButton();
-				}
+				gbtn[i] = new JButton();
 			}
+			glbl[0].setText("문제: "+ quiz[ran]);
+			glbl[1].setIcon(lobbyimg);
+			//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
+			gbtn[0].setText("1번: " + c1[ran]);
+			gbtn[1].setText("2번: " + c2[ran]);
+			gbtn[2].setText("3번: " + c3[ran]);
+			answer = ans[ran]; //위치 확인 바람
 		}
 		
-		void getGameComp() {
+		void addGameComp() {
+			//0은 문제, 1은 사진, 2는 선택지
+			add(gpnl[0], BorderLayout.NORTH);
+			add(gpnl[1], BorderLayout.CENTER);
+			add(gpnl[2], BorderLayout.SOUTH);
 			
+			//문제 설정
+			gpnl[0].add(glbl[0]);
+			gpnl[0].setBackground(Color.red);
+			//사진 설정
+			gpnl[1].add(glbl[1]);
+			gpnl[1].setBackground(Color.red);
+			//버튼 설정
+			gpnl[2].add(gbtn[0]);
+			gpnl[2].add(gbtn[1]);
+			gpnl[2].add(gbtn[2]);
+			gpnl[2].setBackground(Color.red);
 		}
 	}
 	//실점,패널티용 경고 프레임
