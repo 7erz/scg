@@ -110,7 +110,7 @@ JPanel btnpnl = new JPanel();
 		String[] c3 = new String[10];	//3번 문항(할수 있으면 추가)
 		int ran = rd.nextInt(quiz.length);
 		int answer = 0;
-		int score = 0;
+		int life = 3;
 		int[] ans = new int[10]; //정답의 갯수
 		//JTextField name = new JTextField(5);
 		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/logotest1.jpg");
@@ -119,6 +119,8 @@ JPanel btnpnl = new JPanel();
 		//LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
 		Music ingame = new Music("ingame.mp3", true);
+		
+		
 		First(){
 			super("시작");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -133,6 +135,65 @@ JPanel btnpnl = new JPanel();
 
 			//LGPL 라이센스
 			lobby.start();
+			
+			//문제 리스트
+			//문제리스트
+			quiz[0] = "이 곳은 어느 나라일까요?";	//c2
+			quiz[1] = "1989년 천안문에서 무슨 일이 일어났나요?"; //c2
+			quiz[2] = "한복은 어느 나라 전통의상일까요?"; //c1
+			quiz[3] = "김치는 어느 나라 고유의 음식일까요?"; //c1
+			quiz[4] = "신장 위구르에선 무슨 일이 일어나고 있나요?"; //c2
+			quiz[5] = "자녀는 몇명을 키워야 할까요?"; //c3
+			quiz[6] = "일주일에 게임을 몇시간 하십니까?"; //c3
+			quiz[7] = "코로나는 어느 지역에서 발원했나요?"; //c3
+			quiz[8] = "한국전쟁은?"; //c1
+			quiz[9] = "세계 최고의 나라는?";//c2
+			//선텍지 1번
+			c1[0] = "미국의 우방국";
+			c1[1] = "천안문 6.4 항쟁";
+			c1[2] = "중화인민공화국";	//정답
+			c1[3] = "중화인민공화국";	//정답
+			c1[4] = "노동착취와 성노예화, 장기 적출";
+			c1[5] = "2명";
+			c1[6] = "5시간";
+			c1[7] = "우한시";
+			c1[8] = "항미원조"; //정답
+			c1[9] = "미국";
+			//선택지 2번
+			c2[0] = "중화인민공화국";	//정답
+			c2[1] = "아무 일이 없었습니다.";	//정답
+			c2[2] = "햔국";
+			c2[3] = "한국";
+			c2[4] = "그들을 교육시켜 사회에 내보낼 준비";	//정답
+			c2[5] = "69,420명";
+			c2[6] = "74시간";
+			c2[7] = "베이징시";
+			c2[8] = "침략전쟁";
+			c2[9] = "중화인민공화국"; //정답
+			//선택지 3번
+			c3[0] = "대만";
+			c3[1] = "진압 당한 그 사건?";
+			c3[2] = "둘다 아닌가?";
+			c3[3] = "일본";
+			c3[4] = "이슬람 신자 탄압";
+			c3[5] = "1명";	//정답
+			c3[6] = "3시간";	//정답
+			c3[7] = "부산시"; //정답
+			c3[8] = "정치쇼";
+			c3[9] = "유럽연합";
+			//정답리스트
+			ans[0] = 2;
+			ans[1] = 2;
+			ans[2] = 1;
+			ans[3] = 1;
+			ans[4] = 2;
+			ans[5] = 3;
+			ans[6] = 3;
+			ans[7] = 3;
+			ans[8] = 1;
+			ans[9] = 2;
+			
+			answer = ans[ran]; //위치 확인 바람
 
 			setSize(1280,720);
 			setVisible(true);
@@ -203,7 +264,7 @@ JPanel btnpnl = new JPanel();
 					//인게임 설정
 					setGameComp();
 					addGameComp();
-					//addGameEvent();
+					addGameEvent();
 					
 				}
 			}
@@ -227,39 +288,9 @@ JPanel btnpnl = new JPanel();
 				gpnl[i] = new JPanel();
 				glbl[i] = new JLabel();
 				gbtn[i] = new JButton();
+				gbtn[i].setPreferredSize(new Dimension(200,200));
 			}
-			//문제리스트
-			quiz[0] = "이 곳은 어느 나라일까요?";
-			quiz[1] = "1989년 천안문에서 무슨 일이 일어났나요?";
-			quiz[2] = "한복은 어느 나라 전통의상일까요?";
-			quiz[3] = "김치는 어느 나라 고유의 음식일까요?";
-			quiz[4] = "신장 위구르에선 무슨 일이 일어나고 있나요?";
-			quiz[5] = "자녀는 몇명을 키워야 할까요?";
-			quiz[6] = "일주일에 게임을 몇시간 하십니까?";
-			//선텍지 1번
-			c1[0] = "미국의 우방국";
-			c1[1] = "천안문 6.4 항쟁";
-			c1[2] = "중화인민공화국";	//정답
-			c1[3] = "중화인민공화국";	//정답
-			c1[4] = "노동착취와 성노예화, 장기 적출";
-			c1[5] = "2명";
-			c1[6] = "5시간";
-			//선택지 2번
-			c2[0] = "중화인민공화국";	//정답
-			c2[1] = "아무 일이 없었습니다.";	//정답
-			c2[2] = "햔국";
-			c2[3] = "한국";
-			c2[4] = "그들을 교육시켜 사회에 내보낼 준비";	//정답
-			c2[5] = "69,420명";
-			c2[6] = "74시간";
-			//선택지 3번
-			c3[0] = "대만";
-			c3[1] = "진압 당한 그 사건?";
-			c3[2] = "둘다 아닌가?";
-			c3[3] = "일본";
-			c3[4] = "이슬람 신자 탄압";
-			c3[5] = "1명";	//정답
-			c3[6] = "3시간";	//정답
+			gpnl[2].setLayout(new FlowLayout());
 			
 			glbl[0].setText("문제: "+ quiz[ran]);
 			glbl[1].setIcon(lobbyimg);
@@ -267,7 +298,7 @@ JPanel btnpnl = new JPanel();
 			gbtn[0].setText("1번: " + c1[ran]);
 			gbtn[1].setText("2번: " + c2[ran]);
 			gbtn[2].setText("3번: " + c3[ran]);
-			answer = ans[ran]; //위치 확인 바람
+			
 		}
 		
 		void addGameComp() {
@@ -275,6 +306,7 @@ JPanel btnpnl = new JPanel();
 			add(gpnl[0], BorderLayout.NORTH);
 			add(gpnl[1], BorderLayout.CENTER);
 			add(gpnl[2], BorderLayout.SOUTH);
+			//add(gpnl[2], FlowLayout.CENTER);
 			
 			//문제 설정
 			gpnl[0].add(glbl[0]);
@@ -283,10 +315,36 @@ JPanel btnpnl = new JPanel();
 			gpnl[1].add(glbl[1]);
 			gpnl[1].setBackground(Color.red);
 			//버튼 설정
-			gpnl[2].add(gbtn[0]);
-			gpnl[2].add(gbtn[1]);
-			gpnl[2].add(gbtn[2]);
+			
+			gpnl[2].add(gbtn[0],FlowLayout.LEFT);
+			gpnl[2].add(gbtn[1],FlowLayout.CENTER);
+			gpnl[2].add(gbtn[2],FlowLayout.RIGHT);
 			gpnl[2].setBackground(Color.red);
+		}
+		//정답과 오답 리스터 처리
+		void addGameEvent() {
+			gbtn[0].addActionListener(new CorrectHandler());
+			gbtn[1].addActionListener(new CorrectHandler());
+			gbtn[2].addActionListener(new CorrectHandler());
+		}
+		//정답 리스너
+		class CorrectHandler implements ActionListener{
+			
+			public void actionPerformed(ActionEvent e) {
+				//ran=문제번호
+				//gbtn[0] gbtn[0] gbtn[0]
+				//ans[ran]=2
+				if(e.getSource()==gbtn[ans[ran]-1]){
+					ran = rd.nextInt(ans.length);
+					glbl[0].setText("문제: "+ quiz[ran]);
+					glbl[1].setIcon(lobbyimg);
+					//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
+					gbtn[0].setText("1번: " + c1[ran]);
+					gbtn[1].setText("2번: " + c2[ran]);
+					gbtn[2].setText("3번: " + c3[ran]);
+				}
+
+			}
 		}
 	}
 	//실점,패널티용 경고 프레임
