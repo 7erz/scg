@@ -2,7 +2,14 @@ package ossproject;
 import javax.swing.*;
 import java.awt.font.*;
 import java.io.File;
-import java.util.Random;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+import java.util.*;
+import java.util.Timer;
 import java.awt.*;
 import java.awt.event.*;
 //9월 30일 시작
@@ -112,13 +119,14 @@ JPanel btnpnl = new JPanel();
 		int answer = 0;
 		int life = 3;
 		int[] ans = new int[10]; //정답의 갯수
-		//JTextField name = new JTextField(5);
-		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/logotest1.jpg");
-		ImageIcon left = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
-		ImageIcon right = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/loading.gif");
+		
+		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/gamelogo.png");
 		//LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
 		Music ingame = new Music("ingame.mp3", true);
+		Music baton = new Music("Baton.mp3",false);
+		Music chimp = new Music("Chimp.mp3",false);
+		Music yay = new Music("Yay.mp3",false);
 		
 		
 		First(){
@@ -164,7 +172,7 @@ JPanel btnpnl = new JPanel();
 			c2[1] = "아무 일이 없었습니다.";	//정답
 			c2[2] = "햔국";
 			c2[3] = "한국";
-			c2[4] = "그들을 교육시켜 사회에 내보낼 준비";	//정답
+			c2[4] = "교육시켜 사회에 내보낼 준비";	//정답
 			c2[5] = "69,420명";
 			c2[6] = "74시간";
 			c2[7] = "베이징시";
@@ -197,6 +205,7 @@ JPanel btnpnl = new JPanel();
 
 			setSize(1280,720);
 			setVisible(true);
+			setLocationRelativeTo(null);
 		}
 		void setComp() {
 			nametxt = new JTextField(7);
@@ -208,14 +217,13 @@ JPanel btnpnl = new JPanel();
 				flbl[i] = new JLabel();
 				if(i <2) {
 					fbtn[i] = new JButton();
+					fbtn[i].setPreferredSize(new Dimension(300,200));
+					fbtn[i].setFont(new Font("맑은고딕",Font.BOLD,16));
 				}
 				
 			}
 			//라벨설정(0은 이름 칸 추가,1에는 로고 추가)
-			flbl[0].setText("이름");
 			flbl[1].setIcon(lobbyimg);
-			flbl[2].setIcon(left);
-			flbl[3].setIcon(right);
 			//버튼 설정
 			fbtn[0].setText("시작");
 			fbtn[1].setText("종료");
@@ -224,11 +232,8 @@ JPanel btnpnl = new JPanel();
 		}
 		void addComp() {
 			//패널 배치
-			add(fpnl[0], BorderLayout.NORTH);
-			add(fpnl[1], BorderLayout.CENTER);
+			add(fpnl[0], BorderLayout.CENTER);
 			add(fpnl[2], BorderLayout.SOUTH);
-			add(fpnl[3], BorderLayout.WEST);
-			add(fpnl[4], BorderLayout.EAST);
 			//로고라벨을 패널0에 추가
 			fpnl[0].add(flbl[1]);
 			fpnl[0].setBackground(Color.RED);
@@ -288,11 +293,12 @@ JPanel btnpnl = new JPanel();
 				gpnl[i] = new JPanel();
 				glbl[i] = new JLabel();
 				gbtn[i] = new JButton();
-				gbtn[i].setPreferredSize(new Dimension(200,200));
+				gbtn[i].setPreferredSize(new Dimension(300,200));
+				gbtn[i].setFont(new Font("맑은고딕",Font.BOLD,16));
 			}
 			gpnl[2].setLayout(new FlowLayout());
-			
 			glbl[0].setText("문제: "+ quiz[ran]);
+			glbl[0].setFont(new Font("궁서체",Font.BOLD, 40));
 			glbl[1].setIcon(lobbyimg);
 			//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
 			gbtn[0].setText("1번: " + c1[ran]);
@@ -334,7 +340,9 @@ JPanel btnpnl = new JPanel();
 				//ran=문제번호
 				//gbtn[0] gbtn[0] gbtn[0]
 				//ans[ran]=2
-				if(e.getSource()==gbtn[ans[ran]-1]){
+				if(e.getSource()==gbtn[ans[ran]-1]){ 
+					yay.start();
+					new CorrectResult();
 					ran = rd.nextInt(ans.length);
 					glbl[0].setText("문제: "+ quiz[ran]);
 					glbl[1].setIcon(lobbyimg);
@@ -343,9 +351,26 @@ JPanel btnpnl = new JPanel();
 					gbtn[1].setText("2번: " + c2[ran]);
 					gbtn[2].setText("3번: " + c3[ran]);
 				}
+				else {
+					chimp.start();
+					new WrongResult();
+					ran = rd.nextInt(ans.length);
+					glbl[0].setText("문제: "+ quiz[ran]);
+					//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
+					gbtn[0].setText("1번: " + c1[ran]);
+					gbtn[1].setText("2번: " + c2[ran]);
+					gbtn[2].setText("3번: " + c3[ran]);
+					life = life - 1;
+					if(life == 0) {
+						setVisible(false);
+						new GameOver();
+						ingame.stop();
+					}
+				}
 
 			}
 		}
+		
 	}
 	//실점,패널티용 경고 프레임
 	class PenaltyImage extends JFrame{
@@ -354,7 +379,7 @@ JPanel btnpnl = new JPanel();
 			//사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			penalty.setUndecorated(true);
-			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/redtxt.png");
 			JLabel warnlbl = new JLabel(image);
 			penalty.getContentPane().add(warnlbl);
 			penalty.setSize(image.getIconWidth(), image.getIconHeight());
@@ -365,6 +390,7 @@ JPanel btnpnl = new JPanel();
 			penalty.setVisible(true);
 			//버튼으로 패널티창 상호작용
 			penalty.addKeyListener(new ExitWarningListener());
+			penalty.setLocationRelativeTo(null);
 		}
 		//escape 키로 창 닫기
 		class ExitWarningListener extends KeyAdapter {
@@ -376,6 +402,359 @@ JPanel btnpnl = new JPanel();
 		}
 	}
 	
+	class CorrectResult extends JFrame{
+		JFrame cResult = new JFrame();
+		public CorrectResult() {
+			//사이즈 구하기
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			cResult.setUndecorated(true);
+			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/greentxt.png");
+			JLabel warnlbl = new JLabel(image);
+			cResult.getContentPane().add(warnlbl);
+			cResult.setSize(image.getIconWidth(), image.getIconHeight());
+			//가로 세로 창을 놓을 곳 배치
+			int x = (screenSize.width - cResult.getSize().width)/2;
+			int y = (screenSize.height - cResult.getSize().height)/2;
+			cResult.setLocation(x, y);
+			cResult.setVisible(true);
+			//버튼으로 패널티창 상호작용
+			cResult.addKeyListener(new ExitWarningListener());
+			cResult.setLocationRelativeTo(null);
+			
+		}
+		//escape 키로 창 닫기
+		class ExitWarningListener extends KeyAdapter {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					cResult.setVisible(false);
+				}
+			}
+		}
+	}
+	
+	class WrongResult extends JFrame{
+		JFrame wResult = new JFrame();
+		public WrongResult() {
+			//사이즈 구하기
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			wResult.setUndecorated(true);
+			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/redtxt.png");
+			JLabel warnlbl = new JLabel(image);
+			wResult.getContentPane().add(warnlbl);
+			wResult.setSize(image.getIconWidth(), image.getIconHeight());
+			//가로 세로 창을 놓을 곳 배치
+			int x = (screenSize.width - wResult.getSize().width)/2;
+			int y = (screenSize.height - wResult.getSize().height)/2;
+			wResult.setLocation(x, y);
+			wResult.setVisible(true);
+			//버튼으로 패널티창 상호작용
+			wResult.addKeyListener(new ExitWarningListener());
+			wResult.setLocationRelativeTo(null);
+		}
+		//escape 키로 창 닫기
+		class ExitWarningListener extends KeyAdapter {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					wResult.setVisible(false);
+				}
+			}
+		}
+	}
+	class GameOver extends JFrame  {
+		ImageIcon gameover = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+		Music gameovermusic = new Music("gameover.mp3",false);
+		JPanel opnl[];
+		JLabel olbl[];
+		JButton obtn[];
+		GameOver() {
+			super("GAME OVER");
+			
+			setOverComp();
+			addOverComp();
+			addOverEvent();
+			
+			gameovermusic.start();
+			setSize(1280,720);
+			setVisible(true);
+			setLocationRelativeTo(null);
+		}
+		void setOverComp() {
+			opnl = new JPanel[3];
+			olbl = new JLabel[3];
+			obtn = new JButton[3];
+			for(int i = 0; i < 3; i++) {
+				opnl[i] = new JPanel();
+				obtn[i] = new JButton();
+				obtn[i].setPreferredSize(new Dimension(300,200));
+				if(i<2) {
+					olbl[i] = new JLabel();
+				}
+		}
+			olbl[0].setText("<html color='red'>GAME OVER<br/>당신은 처형될 것입니다.</html>");
+			olbl[1].setIcon(gameover);
+			
+			obtn[0].setText("재시작");
+			obtn[1].setText("종료");
+			obtn[2].setText("오픈소스 라이선스");
+	}
+		void addOverComp() {
+			add(opnl[0], BorderLayout.NORTH);
+			add(opnl[1], BorderLayout.CENTER);
+			add(opnl[2], BorderLayout.SOUTH);
+			
+			//문제 설정
+			opnl[0].add(olbl[0]);
+			opnl[0].setBackground(Color.red);
+			//사진 설정
+			opnl[1].add(olbl[1]);
+			opnl[1].setBackground(Color.red);
+			//버튼 설정
+			
+			opnl[2].add(obtn[0],FlowLayout.LEFT);
+			opnl[2].add(obtn[1],FlowLayout.CENTER);
+			opnl[2].add(obtn[2],FlowLayout.RIGHT);
+			opnl[2].setBackground(Color.red);
+		}
+		void addOverEvent() {
+			obtn[0].addActionListener(new RestartListener());
+			obtn[1].addActionListener(new ExitGameListener());
+			obtn[2].addActionListener(new OpenSourceListener());
+		}
+		
+		class RestartListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==obtn[0]) {
+					setVisible(false);
+					gameovermusic.stop();
+					new First();
+				}
+			}
+		}
+		class ExitGameListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==obtn[1]) {
+					gameovermusic.stop();
+					System.exit(0);
+				}
+			}
+		}
+		class OpenSourceListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==obtn[2]) {
+					new OSL();
+				}
+			}
+		}
+			
+	}
+	
+	class OSL extends JFrame {
+		JPanel oslpnl;
+		JTable osltbl;
+		JTextArea oslta;
+		JScrollPane scrollPane;
+		
+		OSL(){
+			super("Open Source License");
+			
+			setOSLComp();
+			addOSLComp();
+			
+			setSize(1280,720);
+			setVisible(true);
+			setLocationRelativeTo(null);
+		}
+		
+		void setOSLComp() {
+			oslpnl = new JPanel();
+			osltbl = new JTable();
+			scrollPane = new JScrollPane(oslta);
+			oslta = new JTextArea("GNU LESSER GENERAL PUBLIC LICENSE\r\n"
+					+ "Version 3, 29 June 2007\r\n"
+					+ "\r\n"
+					+ "Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>\r\n"
+					+ "\r\n"
+					+ "Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.\r\n"
+					+ "\r\n"
+					+ "This version of the GNU Lesser General Public License incorporates the terms and conditions of version 3 of the GNU General Public License, supplemented by the additional permissions listed below.\r\n"
+					+ "\r\n"
+					+ "0. Additional Definitions.\r\n"
+					+ "\r\n"
+					+ "As used herein, “this License” refers to version 3 of the GNU Lesser General Public License, and the “GNU GPL” refers to version 3 of the GNU General Public License.\r\n"
+					+ "\r\n"
+					+ "“The Library” refers to a covered work governed by this License, other than an Application or a Combined Work as defined below.\r\n"
+					+ "\r\n"
+					+ "An “Application” is any work that makes use of an interface provided by the Library, but which is not otherwise based on the Library. Defining a subclass of a class defined by the Library is deemed a mode of using an interface provided by the Library.\r\n"
+					+ "\r\n"
+					+ "A “Combined Work” is a work produced by combining or linking an Application with the Library. The particular version of the Library with which the Combined Work was made is also called the “Linked Version”.\r\n"
+					+ "\r\n"
+					+ "The “Minimal Corresponding Source” for a Combined Work means the Corresponding Source for the Combined Work, excluding any source code for portions of the Combined Work that, considered in isolation, are based on the Application, and not on the Linked Version.\r\n"
+					+ "\r\n"
+					+ "The “Corresponding Application Code” for a Combined Work means the object code and/or source code for the Application, including any data and utility programs needed for reproducing the Combined Work from the Application, but excluding the System Libraries of the Combined Work.\r\n"
+					+ "\r\n"
+					+ "1. Exception to Section 3 of the GNU GPL.\r\n"
+					+ "\r\n"
+					+ "You may convey a covered work under sections 3 and 4 of this License without being bound by section 3 of the GNU GPL.\r\n"
+					+ "\r\n"
+					+ "2. Conveying Modified Versions.\r\n"
+					+ "\r\n"
+					+ "If you modify a copy of the Library, and, in your modifications, a facility refers to a function or data to be supplied by an Application that uses the facility (other than as an argument passed when the facility is invoked), then you may convey a copy of the modified version:\r\n"
+					+ "\r\n"
+					+ "a) under this License, provided that you make a good faith effort to ensure that, in the event an Application does not supply the function or data, the facility still operates, and performs whatever part of its purpose remains meaningful, or\r\n"
+					+ "b) under the GNU GPL, with none of the additional permissions of this License applicable to that copy.\r\n"
+					+ "3. Object Code Incorporating Material from Library Header Files.\r\n"
+					+ "\r\n"
+					+ "The object code form of an Application may incorporate material from a header file that is part of the Library. You may convey such object code under terms of your choice, provided that, if the incorporated material is not limited to numerical parameters, data structure layouts and accessors, or small macros, inline functions and templates (ten or fewer lines in length), you do both of the following:\r\n"
+					+ "\r\n"
+					+ "a) Give prominent notice with each copy of the object code that the Library is used in it and that the Library and its use are covered by this License.\r\n"
+					+ "b) Accompany the object code with a copy of the GNU GPL and this license document.\r\n"
+					+ "4. Combined Works.\r\n"
+					+ "\r\n"
+					+ "You may convey a Combined Work under terms of your choice that, taken together, effectively do not restrict modification of the portions of the Library contained in the Combined Work and reverse engineering for debugging such modifications, if you also do each of the following:\r\n"
+					+ "\r\n"
+					+ "a) Give prominent notice with each copy of the Combined Work that the Library is used in it and that the Library and its use are covered by this License.\r\n"
+					+ "b) Accompany the Combined Work with a copy of the GNU GPL and this license document.\r\n"
+					+ "c) For a Combined Work that displays copyright notices during execution, include the copyright notice for the Library among these notices, as well as a reference directing the user to the copies of the GNU GPL and this license document.\r\n"
+					+ "d) Do one of the following:\r\n"
+					+ "0) Convey the Minimal Corresponding Source under the terms of this License, and the Corresponding Application Code in a form suitable for, and under terms that permit, the user to recombine or relink the Application with a modified version of the Linked Version to produce a modified Combined Work, in the manner specified by section 6 of the GNU GPL for conveying Corresponding Source.\r\n"
+					+ "1) Use a suitable shared library mechanism for linking with the Library. A suitable mechanism is one that (a) uses at run time a copy of the Library already present on the user's computer system, and (b) will operate properly with a modified version of the Library that is interface-compatible with the Linked Version.\r\n"
+					+ "e) Provide Installation Information, but only if you would otherwise be required to provide such information under section 6 of the GNU GPL, and only to the extent that such information is necessary to install and execute a modified version of the Combined Work produced by recombining or relinking the Application with a modified version of the Linked Version. (If you use option 4d0, the Installation Information must accompany the Minimal Corresponding Source and Corresponding Application Code. If you use option 4d1, you must provide the Installation Information in the manner specified by section 6 of the GNU GPL for conveying Corresponding Source.)\r\n"
+					+ "5. Combined Libraries.\r\n"
+					+ "\r\n"
+					+ "You may place library facilities that are a work based on the Library side by side in a single library together with other library facilities that are not Applications and are not covered by this License, and convey such a combined library under terms of your choice, if you do both of the following:\r\n"
+					+ "\r\n"
+					+ "a) Accompany the combined library with a copy of the same work based on the Library, uncombined with any other library facilities, conveyed under the terms of this License.\r\n"
+					+ "b) Give prominent notice with the combined library that part of it is a work based on the Library, and explaining where to find the accompanying uncombined form of the same work.\r\n"
+					+ "6. Revised Versions of the GNU Lesser General Public License.\r\n"
+					+ "\r\n"
+					+ "The Free Software Foundation may publish revised and/or new versions of the GNU Lesser General Public License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns.\r\n"
+					+ "\r\n"
+					+ "Each version is given a distinguishing version number. If the Library as you received it specifies that a certain numbered version of the GNU Lesser General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that published version or of any later version published by the Free Software Foundation. If the Library as you received it does not specify a version number of the GNU Lesser General Public License, you may choose any version of the GNU Lesser General Public License ever published by the Free Software Foundation.\r\n"
+					+ "\r\n"
+					+ "If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.",10,50);
+			 
+		}
+		void addOSLComp() {
+			add(oslpnl, BorderLayout.CENTER);
+			oslpnl.add(new JScrollPane(osltbl));
+			osltbl.add(oslta);
+			
+		}
+	}
+
+//	class CorrectResult extends JFrame{
+//		//여기는 타이머 주고 3초뒤 나올 화면 
+//		Timer timer1 = new Timer();
+//		//정답
+//		JFrame CorrectFrame = new JFrame();
+//		TimerTask task1 = new TimerTask() {
+//			JLabel t1lbl = new JLabel();
+//			ImageIcon resultimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+//			Music goodeffect = new Music("loading.mp3", false);
+//			public void run() {
+//				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//				
+//				t1lbl = new JLabel();
+//				t1lbl.setIcon(resultimg);
+//				CorrectFrame.getContentPane().add(t1lbl);
+//				CorrectFrame.setVisible(true);
+//				goodeffect.start();
+//				
+//				CorrectFrame.setSize(1280,720);
+//				CorrectFrame.setLocationRelativeTo(null);
+//				timer1.cancel();
+//			}
+//			
+//		};
+//		//여기는 바로 나올 화면
+//		JPanel pnl = new JPanel();
+//		JLabel lbl = new JLabel();
+//		ImageIcon waitimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/start.png");
+//		Music waiteffect = new Music("loading.mp3", false);
+//		CorrectResult(){
+//			super("Result...");
+//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			Container c = getContentPane();
+//			setUndecorated(true);
+//			c.setLayout(new BorderLayout());
+//			pnl = new JPanel();
+//			lbl = new JLabel();
+//			lbl.setIcon(waitimg);
+//			pnl.add(lbl);
+//			c.add(pnl);
+//			
+//			waiteffect.start();
+//			
+//			timer1.schedule(task1, 3000);
+//			
+//			setSize(1280,720);
+//			setVisible(true);
+//			setLocationRelativeTo(null);
+//			
+//			c.addKeyListener(new ExitResultListener());
+//		}
+//		class ExitResultListener extends KeyAdapter {
+//			public void keyPressed(KeyEvent e) {
+//				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+//					c.setVisible(false);
+//				}
+//			}
+//		}
+//	}
+//	
+//	class WrongResult extends JFrame{
+//		//여기는 타이머 주고 3초뒤 나올 화면 
+//		Timer timer1 = new Timer();
+//		//오답
+//		JFrame WrongFrame = new JFrame();
+//		TimerTask task1 = new TimerTask() {
+//			JLabel t1lbl = new JLabel();
+//			ImageIcon resultimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+//			Music badeffect = new Music("loading.mp3", false);
+//			public void run() {
+//				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//				
+//				t1lbl = new JLabel();
+//				t1lbl.setIcon(resultimg);
+//				WrongFrame.getContentPane().add(t1lbl);
+//				WrongFrame.setVisible(true);
+//				badeffect.start();
+//				
+//				WrongFrame.setSize(1280,720);
+//				WrongFrame.setLocationRelativeTo(null);
+//				timer1.cancel();
+//			}
+//		};
+//		//여기는 바로 나올 화면
+//		JPanel pnl = new JPanel();
+//		JLabel lbl = new JLabel();
+//		ImageIcon waitimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/start.png");
+//		Music waiteffect = new Music("loading.mp3", false);
+//		WrongResult(){
+//			super("Result...");
+//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			Container c = getContentPane();
+//			setUndecorated(true);
+//			c.setLayout(new BorderLayout());
+//			pnl = new JPanel();
+//			lbl = new JLabel();
+//			lbl.setIcon(waitimg);
+//			pnl.add(lbl);
+//			c.add(pnl);
+//			
+//			waiteffect.start();
+//			
+//			timer1.schedule(task1, 3000);
+//			
+//			setSize(1280,720);
+//			setVisible(true);
+//			setLocationRelativeTo(null);
+//			
+//			dispose();
+//		}
+//		
+//	}
 	
 	public static void main(String[] args) {
 		new scg();
