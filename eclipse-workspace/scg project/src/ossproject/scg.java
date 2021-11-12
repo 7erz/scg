@@ -32,6 +32,13 @@ GridLayout warngird = new GridLayout(2,2,10,10);
 GridLayout btngird = new GridLayout(2,2,10,10);
 FlowLayout flow = new FlowLayout(10, 400, 10);
 JPanel btnpnl = new JPanel();
+
+
+
+Music baton = new Music("Baton.mp3",false);
+
+
+
 	public scg() {
 		super("scg");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,10 +131,6 @@ JPanel btnpnl = new JPanel();
 		//LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
 		Music ingame = new Music("ingame.mp3", true);
-		Music baton = new Music("Baton.mp3",false);
-		Music chimp = new Music("Chimp.mp3",false);
-		Music yay = new Music("Yay.mp3",false);
-		
 		
 		First(){
 			super("시작");
@@ -135,6 +138,7 @@ JPanel btnpnl = new JPanel();
 			Container c = getContentPane();
 			//이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
 			//c.setBackground(red);
+			//윗창 없애기
 			setUndecorated(true);
 			//게임 로비 설정
 			setComp();
@@ -340,8 +344,7 @@ JPanel btnpnl = new JPanel();
 				//ran=문제번호
 				//gbtn[0] gbtn[0] gbtn[0]
 				//ans[ran]=2
-				if(e.getSource()==gbtn[ans[ran]-1]){ 
-					yay.start();
+				if(e.getSource()==gbtn[ans[ran]-1]){
 					new CorrectResult();
 					ran = rd.nextInt(ans.length);
 					glbl[0].setText("문제: "+ quiz[ran]);
@@ -352,7 +355,6 @@ JPanel btnpnl = new JPanel();
 					gbtn[2].setText("3번: " + c3[ran]);
 				}
 				else {
-					chimp.start();
 					new WrongResult();
 					ran = rd.nextInt(ans.length);
 					glbl[0].setText("문제: "+ quiz[ran]);
@@ -391,6 +393,7 @@ JPanel btnpnl = new JPanel();
 			//버튼으로 패널티창 상호작용
 			penalty.addKeyListener(new ExitWarningListener());
 			penalty.setLocationRelativeTo(null);
+			
 		}
 		//escape 키로 창 닫기
 		class ExitWarningListener extends KeyAdapter {
@@ -404,11 +407,12 @@ JPanel btnpnl = new JPanel();
 	
 	class CorrectResult extends JFrame{
 		JFrame cResult = new JFrame();
+		Music yay = new Music("Yay.mp3",false);
 		public CorrectResult() {
 			//사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			cResult.setUndecorated(true);
-			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/greentxt.png");
+			ImageIcon image = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/greentxt2.png");
 			JLabel warnlbl = new JLabel(image);
 			cResult.getContentPane().add(warnlbl);
 			cResult.setSize(image.getIconWidth(), image.getIconHeight());
@@ -420,6 +424,7 @@ JPanel btnpnl = new JPanel();
 			//버튼으로 패널티창 상호작용
 			cResult.addKeyListener(new ExitWarningListener());
 			cResult.setLocationRelativeTo(null);
+			yay.start();
 			
 		}
 		//escape 키로 창 닫기
@@ -427,6 +432,7 @@ JPanel btnpnl = new JPanel();
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					cResult.setVisible(false);
+					yay.stop();
 				}
 			}
 		}
@@ -434,6 +440,7 @@ JPanel btnpnl = new JPanel();
 	
 	class WrongResult extends JFrame{
 		JFrame wResult = new JFrame();
+		Music chimp = new Music("Chimp.mp3",false);
 		public WrongResult() {
 			//사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -450,12 +457,14 @@ JPanel btnpnl = new JPanel();
 			//버튼으로 패널티창 상호작용
 			wResult.addKeyListener(new ExitWarningListener());
 			wResult.setLocationRelativeTo(null);
+			chimp.start();
 		}
 		//escape 키로 창 닫기
 		class ExitWarningListener extends KeyAdapter {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					wResult.setVisible(false);
+					chimp.stop();
 				}
 			}
 		}
@@ -468,6 +477,7 @@ JPanel btnpnl = new JPanel();
 		JButton obtn[];
 		GameOver() {
 			super("GAME OVER");
+			setUndecorated(true);
 			
 			setOverComp();
 			addOverComp();
