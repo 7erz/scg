@@ -104,7 +104,7 @@ Music baton = new Music("Baton.mp3",false);
 	
 	
 	//10월 28일 시작
-	class First extends JFrame{
+	public class First extends JFrame{
 		//상단창 프레임 제거
 		Frame frame = new Frame();
 		//게임 로비 패널, 라벨, 버튼 지정
@@ -125,12 +125,13 @@ Music baton = new Music("Baton.mp3",false);
 		int ran = rd.nextInt(quiz.length);
 		int answer = 0;
 		int life = 3;
+		int score;
 		int[] ans = new int[10]; //정답의 갯수
 		
 		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/gamelogo.png");
 		//LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
-		Music ingame = new Music("ingame.mp3", true);
+		Music ingame = new Music("Ingame.mp3", true);
 		
 		First(){
 			super("시작");
@@ -301,7 +302,7 @@ Music baton = new Music("Baton.mp3",false);
 				gbtn[i].setFont(new Font("맑은고딕",Font.BOLD,16));
 			}
 			gpnl[2].setLayout(new FlowLayout());
-			glbl[0].setText("문제: "+ quiz[ran]);
+			glbl[0].setText("점수"+score+ "문제: "+ quiz[ran]);
 			glbl[0].setFont(new Font("궁서체",Font.BOLD, 40));
 			glbl[1].setIcon(lobbyimg);
 			//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
@@ -345,9 +346,10 @@ Music baton = new Music("Baton.mp3",false);
 				//gbtn[0] gbtn[0] gbtn[0]
 				//ans[ran]=2
 				if(e.getSource()==gbtn[ans[ran]-1]){
+					score = score + 1;
 					new CorrectResult();
 					ran = rd.nextInt(ans.length);
-					glbl[0].setText("문제: "+ quiz[ran]);
+					glbl[0].setText("점수"+score+ "문제: "+ quiz[ran]);
 					glbl[1].setIcon(lobbyimg);
 					//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
 					gbtn[0].setText("1번: " + c1[ran]);
@@ -355,17 +357,20 @@ Music baton = new Music("Baton.mp3",false);
 					gbtn[2].setText("3번: " + c3[ran]);
 				}
 				else {
-					new WrongResult();
-					ran = rd.nextInt(ans.length);
-					glbl[0].setText("문제: "+ quiz[ran]);
-					//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
-					gbtn[0].setText("1번: " + c1[ran]);
-					gbtn[1].setText("2번: " + c2[ran]);
-					gbtn[2].setText("3번: " + c3[ran]);
 					life = life - 1;
+					if(life == 2 || life == 1) {
+						new WrongResult();
+						ran = rd.nextInt(ans.length);
+						glbl[0].setText("점수"+score+ "문제: "+ quiz[ran]);
+						//현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
+						gbtn[0].setText("1번: " + c1[ran]);
+						gbtn[1].setText("2번: " + c2[ran]);
+						gbtn[2].setText("3번: " + c3[ran]);
+						
+					}
 					if(life == 0) {
 						setVisible(false);
-						new GameOver();
+						new GameOver(score);
 						ingame.stop();
 					}
 				}
@@ -377,6 +382,7 @@ Music baton = new Music("Baton.mp3",false);
 	//실점,패널티용 경고 프레임
 	class PenaltyImage extends JFrame{
 		JFrame penalty = new JFrame();
+		Music BassBoost = new Music("BassBoost.mp3" ,false);
 		public PenaltyImage() {
 			//사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -393,6 +399,7 @@ Music baton = new Music("Baton.mp3",false);
 			//버튼으로 패널티창 상호작용
 			penalty.addKeyListener(new ExitWarningListener());
 			penalty.setLocationRelativeTo(null);
+			BassBoost.start();
 			
 		}
 		//escape 키로 창 닫기
@@ -400,6 +407,7 @@ Music baton = new Music("Baton.mp3",false);
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					penalty.setVisible(false);
+					BassBoost.stop();
 				}
 			}
 		}
@@ -470,13 +478,16 @@ Music baton = new Music("Baton.mp3",false);
 		}
 	}
 	class GameOver extends JFrame  {
+		int score;
 		ImageIcon gameover = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
 		Music gameovermusic = new Music("gameover.mp3",false);
+		Music scream = new Music("AfricanAmericanScream.mp3",false);
 		JPanel opnl[];
 		JLabel olbl[];
 		JButton obtn[];
-		GameOver() {
+		GameOver(int score) {
 			super("GAME OVER");
+			this.score = score;
 			setUndecorated(true);
 			
 			setOverComp();
@@ -484,6 +495,7 @@ Music baton = new Music("Baton.mp3",false);
 			addOverEvent();
 			
 			gameovermusic.start();
+			scream.start();
 			setSize(1280,720);
 			setVisible(true);
 			setLocationRelativeTo(null);
@@ -492,6 +504,7 @@ Music baton = new Music("Baton.mp3",false);
 			opnl = new JPanel[3];
 			olbl = new JLabel[3];
 			obtn = new JButton[3];
+			
 			for(int i = 0; i < 3; i++) {
 				opnl[i] = new JPanel();
 				obtn[i] = new JButton();
@@ -500,9 +513,13 @@ Music baton = new Music("Baton.mp3",false);
 					olbl[i] = new JLabel();
 				}
 		}
-			olbl[0].setText("<html color='red'>GAME OVER<br/>당신은 처형될 것입니다.</html>");
-			olbl[1].setIcon(gameover);
+			olbl[0].setIcon(gameover);
 			
+			olbl[1].setText(Integer.toString(score));
+			olbl[1].setFont(new Font("궁서체",Font.BOLD,60));
+			olbl[1].setForeground(Color.WHITE);
+			
+
 			obtn[0].setText("재시작");
 			obtn[1].setText("종료");
 			obtn[2].setText("오픈소스 라이선스");
@@ -514,16 +531,16 @@ Music baton = new Music("Baton.mp3",false);
 			
 			//문제 설정
 			opnl[0].add(olbl[0]);
-			opnl[0].setBackground(Color.red);
+			opnl[0].setBackground(Color.BLACK);
 			//사진 설정
 			opnl[1].add(olbl[1]);
-			opnl[1].setBackground(Color.red);
+			opnl[1].setBackground(Color.BLACK);
 			//버튼 설정
 			
 			opnl[2].add(obtn[0],FlowLayout.LEFT);
 			opnl[2].add(obtn[1],FlowLayout.CENTER);
 			opnl[2].add(obtn[2],FlowLayout.RIGHT);
-			opnl[2].setBackground(Color.red);
+			opnl[2].setBackground(Color.BLACK);
 		}
 		void addOverEvent() {
 			obtn[0].addActionListener(new RestartListener());
@@ -536,6 +553,7 @@ Music baton = new Music("Baton.mp3",false);
 				if(e.getSource()==obtn[0]) {
 					setVisible(false);
 					gameovermusic.stop();
+					scream.stop();
 					new First();
 				}
 			}
@@ -544,6 +562,7 @@ Music baton = new Music("Baton.mp3",false);
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource()==obtn[1]) {
 					gameovermusic.stop();
+					scream.stop();
 					System.exit(0);
 				}
 			}
@@ -652,120 +671,6 @@ Music baton = new Music("Baton.mp3",false);
 		}
 	}
 
-//	class CorrectResult extends JFrame{
-//		//여기는 타이머 주고 3초뒤 나올 화면 
-//		Timer timer1 = new Timer();
-//		//정답
-//		JFrame CorrectFrame = new JFrame();
-//		TimerTask task1 = new TimerTask() {
-//			JLabel t1lbl = new JLabel();
-//			ImageIcon resultimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
-//			Music goodeffect = new Music("loading.mp3", false);
-//			public void run() {
-//				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//				
-//				t1lbl = new JLabel();
-//				t1lbl.setIcon(resultimg);
-//				CorrectFrame.getContentPane().add(t1lbl);
-//				CorrectFrame.setVisible(true);
-//				goodeffect.start();
-//				
-//				CorrectFrame.setSize(1280,720);
-//				CorrectFrame.setLocationRelativeTo(null);
-//				timer1.cancel();
-//			}
-//			
-//		};
-//		//여기는 바로 나올 화면
-//		JPanel pnl = new JPanel();
-//		JLabel lbl = new JLabel();
-//		ImageIcon waitimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/start.png");
-//		Music waiteffect = new Music("loading.mp3", false);
-//		CorrectResult(){
-//			super("Result...");
-//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//			Container c = getContentPane();
-//			setUndecorated(true);
-//			c.setLayout(new BorderLayout());
-//			pnl = new JPanel();
-//			lbl = new JLabel();
-//			lbl.setIcon(waitimg);
-//			pnl.add(lbl);
-//			c.add(pnl);
-//			
-//			waiteffect.start();
-//			
-//			timer1.schedule(task1, 3000);
-//			
-//			setSize(1280,720);
-//			setVisible(true);
-//			setLocationRelativeTo(null);
-//			
-//			c.addKeyListener(new ExitResultListener());
-//		}
-//		class ExitResultListener extends KeyAdapter {
-//			public void keyPressed(KeyEvent e) {
-//				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-//					c.setVisible(false);
-//				}
-//			}
-//		}
-//	}
-//	
-//	class WrongResult extends JFrame{
-//		//여기는 타이머 주고 3초뒤 나올 화면 
-//		Timer timer1 = new Timer();
-//		//오답
-//		JFrame WrongFrame = new JFrame();
-//		TimerTask task1 = new TimerTask() {
-//			JLabel t1lbl = new JLabel();
-//			ImageIcon resultimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
-//			Music badeffect = new Music("loading.mp3", false);
-//			public void run() {
-//				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//				
-//				t1lbl = new JLabel();
-//				t1lbl.setIcon(resultimg);
-//				WrongFrame.getContentPane().add(t1lbl);
-//				WrongFrame.setVisible(true);
-//				badeffect.start();
-//				
-//				WrongFrame.setSize(1280,720);
-//				WrongFrame.setLocationRelativeTo(null);
-//				timer1.cancel();
-//			}
-//		};
-//		//여기는 바로 나올 화면
-//		JPanel pnl = new JPanel();
-//		JLabel lbl = new JLabel();
-//		ImageIcon waitimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/start.png");
-//		Music waiteffect = new Music("loading.mp3", false);
-//		WrongResult(){
-//			super("Result...");
-//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//			Container c = getContentPane();
-//			setUndecorated(true);
-//			c.setLayout(new BorderLayout());
-//			pnl = new JPanel();
-//			lbl = new JLabel();
-//			lbl.setIcon(waitimg);
-//			pnl.add(lbl);
-//			c.add(pnl);
-//			
-//			waiteffect.start();
-//			
-//			timer1.schedule(task1, 3000);
-//			
-//			setSize(1280,720);
-//			setVisible(true);
-//			setLocationRelativeTo(null);
-//			
-//			dispose();
-//		}
-//		
-//	}
-	
 	public static void main(String[] args) {
 		new scg();
 		
