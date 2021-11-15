@@ -479,7 +479,7 @@ Music baton = new Music("Baton.mp3",false);
 	}
 	class GameOver extends JFrame  {
 		int score;
-		ImageIcon gameover = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/test.jpg");
+		ImageIcon gameover = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/gameover1fix.png");
 		Music gameovermusic = new Music("gameover.mp3",false);
 		Music scream = new Music("AfricanAmericanScream.mp3",false);
 		JPanel opnl[];
@@ -509,13 +509,14 @@ Music baton = new Music("Baton.mp3",false);
 				opnl[i] = new JPanel();
 				obtn[i] = new JButton();
 				obtn[i].setPreferredSize(new Dimension(300,200));
+				obtn[i].setFont(new Font("맑은고딕",Font.BOLD,30));
 				if(i<2) {
 					olbl[i] = new JLabel();
 				}
 		}
 			olbl[0].setIcon(gameover);
 			
-			olbl[1].setText(Integer.toString(score));
+			olbl[1].setText("<html>당신은 처형될 것입니다.<br/>당신의 점수: "+ Integer.toString(score*15) + "</html>");
 			olbl[1].setFont(new Font("궁서체",Font.BOLD,60));
 			olbl[1].setForeground(Color.WHITE);
 			
