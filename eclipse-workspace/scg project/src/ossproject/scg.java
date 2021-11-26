@@ -125,28 +125,36 @@ Music baton = new Music("Baton.mp3",false);
 		JButton gbtn[];
 		//문제 랜덤으로 제공하기
 		Random rd = new Random();
-		String[] quiz = new String[10];	//문제리스트 참고해서 다시 올릴것
-		String[] c1 = new String[10];	//1번 문항
-		String[] c2 = new String[10];	//2번 문항
-		String[] c3 = new String[10];	//3번 문항(할수 있으면 추가)
+		//여기서
+		String[] quiz = new String[14];	//문제리스트 참고해서 다시 올릴것
+		String[] c1 = new String[14];	//1번 문항
+		String[] c2 = new String[14];	//2번 문항
+		String[] c3 = new String[14];	//3번 문항(할수 있으면 추가)
+		int[] ans = new int[14]; //정답의 갯수
+		//https://seoneu.tistory.com/10 사진 배열
+		ImageIcon[] pic = {
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/0.png"), //[0]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/1.jpg"),	//[1]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/2.jpg"),	//[2]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/3.jpg"),	//[3]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/4.jpg"),	//[4]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/5.jpg"),	//[5]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/6.jpg"),	//[6]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/7.jpg"),	//[7]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/8.png"),	//[8]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/9.jpg"),	//[9]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/10.jpg"),//[10]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/11.jpg"),//[11]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/12.jpg"),//[12]
+				new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/13.jpg"),//[13]
+			};
+		//여기까지 문제가 증가할때마다 수정 해야함
+		
 		int ran = rd.nextInt(quiz.length);
 		int answer = 0;
 		int life = 3;
 		int score;
-		int[] ans = new int[10]; //정답의 갯수
-		//https://seoneu.tistory.com/10 사진 배열
-		ImageIcon[] pic = {
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/0.png"), 	//[0]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/1.jpg"),	//[1]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/2.jpg"),	//[2]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/3.jpg"),	//[3]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/4.jpg"),	//[4]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/5.jpg"),	//[5]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/6.jpg"),	//[6]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/7.jpg"),	//[7]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/8.png"),	//[8]
-			new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/9.jpg"),	//[9]	
-		};
+		
 		ImageIcon lobbyimg = new ImageIcon("C:/Users/leesn/git/scg/eclipse-workspace/scg project/Images/gamelogo.png");
 		//LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
@@ -180,6 +188,10 @@ Music baton = new Music("Baton.mp3",false);
 			quiz[7] = "코로나는 어느 지역에서 발원했나요?"; //c3
 			quiz[8] = "한국전쟁은?"; //c1
 			quiz[9] = "한글창제 세종대왕은 어느 나라 사람?";//c2
+			quiz[10] = "영어는?"; //c1
+			quiz[11] = "징기스칸은?"; //c3
+			quiz[12] = "고구려의 역사는?"; //c1
+			quiz[13] = "홍콩의 독립은?"; //c2
 			//선텍지 1번
 			c1[0] = "미국의 우방국";
 			c1[1] = "천안문 6.4 항쟁";
@@ -191,6 +203,10 @@ Music baton = new Music("Baton.mp3",false);
 			c1[7] = "우한시";
 			c1[8] = "항미원조"; //정답
 			c1[9] = "한민족";
+			c1[10] = "중국어의 사투리"; //정답
+			c1[11] = "몽골인";
+			c1[12] = "중국 한나라의 역사"; //정답
+			c1[13] = "독립해야 한다.";
 			//선택지 2번
 			c2[0] = "중화인민공화국";	//정답
 			c2[1] = "아무 일이 없었습니다.";	//정답
@@ -202,6 +218,10 @@ Music baton = new Music("Baton.mp3",false);
 			c2[7] = "모르겠습니다?";
 			c2[8] = "침략전쟁";
 			c2[9] = "조선족"; //정답
+			c2[10] = "영국의 토속언어";
+			c2[11] = "러시아인";
+			c2[12] = "한국 삼국사 역사";
+			c2[13] = "하나의 중국을 위해 편입"; //정답
 			//선택지 3번
 			c3[0] = "대만";
 			c3[1] = "진압 당한 그 사건?";
@@ -213,6 +233,10 @@ Music baton = new Music("Baton.mp3",false);
 			c3[7] = "서울시"; //정답
 			c3[8] = "정치쇼";
 			c3[9] = "아이누족";
+			c3[10] = "기원을 알수 없다";
+			c3[11] = "중국인"; //정답
+			c3[12] = "러시아 슬라브족 역사";
+			c3[13] = "아직 영국땅 아닌가?";
 			//정답리스트
 			ans[0] = 2;
 			ans[1] = 2;
@@ -224,6 +248,10 @@ Music baton = new Music("Baton.mp3",false);
 			ans[7] = 3;
 			ans[8] = 1;
 			ans[9] = 2;
+			ans[10] = 1;
+			ans[11] = 3;
+			ans[12] = 1;
+			ans[13] = 2;
 			
 			answer = ans[ran]; //위치 확인 바람
 
