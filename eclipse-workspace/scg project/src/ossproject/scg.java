@@ -41,9 +41,10 @@ public class scg extends JFrame implements ActionListener {
 		super("scg");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		c.setLayout(null);
-
-		ImageIcon OK = new ImageIcon("Images/004-check.png");
-		ImageIcon NO = new ImageIcon("Images/003-dislike.png");
+		
+		ImageIcon OK = new ImageIcon(getClass().getClassLoader().getResource("Images/004-check.png"));
+		ImageIcon NO = new ImageIcon(getClass().getClassLoader().getResource("Images/003-dislike.png"));
+		//ImageIcon NO = new ImageIcon("Images/003-dislike.png");
 		JPanel warnpnl = new JPanel();
 		JLabel warnheadlbl = new JLabel();
 		JLabel warnsublbl = new JLabel();
@@ -123,20 +124,20 @@ public class scg extends JFrame implements ActionListener {
 		String[] c3 = new String[14]; // 3번 문항(할수 있으면 추가)
 		int[] ans = new int[14]; // 정답의 갯수
 		// https://seoneu.tistory.com/10 사진 배열
-		ImageIcon[] pic = { new ImageIcon("Images/0.png"), // [0]
-				new ImageIcon("Images/1.jpg"), // [1]
-				new ImageIcon("Images/2.jpg"), // [2]
-				new ImageIcon("Images/3.jpg"), // [3]
-				new ImageIcon("Images/4.jpg"), // [4]
-				new ImageIcon("Images/5.jpg"), // [5]
-				new ImageIcon("Images/6.jpg"), // [6]
-				new ImageIcon("Images/7.jpg"), // [7]
-				new ImageIcon("Images/8.png"), // [8]
-				new ImageIcon("Images/9.jpg"), // [9]
-				new ImageIcon("Images/10.jpg"), // [10]
-				new ImageIcon("Images/11.jpg"), // [11]
-				new ImageIcon("Images/12.jpg"), // [12]
-				new ImageIcon("Images/13.jpg"),// [13]
+		ImageIcon[] pic = { new ImageIcon(getClass().getClassLoader().getResource("Images/0.png")), // [0]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/1.jpg")), // [1]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/2.jpg")), // [2]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/3.jpg")), // [3]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/4.jpg")), // [4]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/5.jpg")), // [5]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/6.jpg")), // [6]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/7.jpg")), // [7]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/8.png")), // [8]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/9.jpg")), // [9]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/10.jpg")), // [10]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/11.jpg")), // [11]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/12.jpg")), // [12]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/13.jpg")),// [13]
 		};
 		// 여기까지 문제가 증가할때마다 수정 해야함
 
@@ -145,7 +146,7 @@ public class scg extends JFrame implements ActionListener {
 		int life = 3;
 		int score;
 
-		ImageIcon lobbyimg = new ImageIcon("Images/gamelogo.png");
+		ImageIcon lobbyimg = new ImageIcon(getClass().getClassLoader().getResource("Images/gamelogo.png"));
 		// LGPL라이센스 JLayer
 		Music lobby = new Music("LOBBY.mp3", true);
 		Music ingame = new Music("Ingame.mp3", true);
@@ -432,7 +433,7 @@ public class scg extends JFrame implements ActionListener {
 			// 사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			penalty.setUndecorated(true);
-			ImageIcon image = new ImageIcon("Images/redtxt.png");
+			ImageIcon image = new ImageIcon(getClass().getClassLoader().getResource("Images/redtxt.png"));
 			JLabel warnlbl = new JLabel(image);
 			penalty.getContentPane().add(warnlbl);
 			penalty.setSize(image.getIconWidth(), image.getIconHeight());
@@ -467,8 +468,7 @@ public class scg extends JFrame implements ActionListener {
 			// 사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			cResult.setUndecorated(true);
-			ImageIcon image = new ImageIcon(
-					"Images/greentxt2.png");
+			ImageIcon image = new ImageIcon(getClass().getClassLoader().getResource("Images/greentxt2.png"));
 			JLabel warnlbl = new JLabel(image);
 			cResult.getContentPane().add(warnlbl);
 			cResult.setSize(image.getIconWidth(), image.getIconHeight());
@@ -503,7 +503,7 @@ public class scg extends JFrame implements ActionListener {
 			// 사이즈 구하기
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			wResult.setUndecorated(true);
-			ImageIcon image = new ImageIcon("Images/redtxt.png");
+			ImageIcon image = new ImageIcon(getClass().getClassLoader().getResource("Images/redtxt.png"));
 			JLabel warnlbl = new JLabel(image);
 			wResult.getContentPane().add(warnlbl);
 			wResult.setSize(image.getIconWidth(), image.getIconHeight());
@@ -531,8 +531,7 @@ public class scg extends JFrame implements ActionListener {
 
 	class GameOver extends JFrame {
 		int score;
-		ImageIcon gameover = new ImageIcon(
-				"Images/gameover1fix.png");
+		ImageIcon gameover = new ImageIcon(getClass().getClassLoader().getResource("Images/gameover1fix.png"));
 		Music gameovermusic = new Music("gameover.mp3", false);
 		Music scream = new Music("AfricanAmericanScream.mp3", false);
 		JPanel opnl[];
