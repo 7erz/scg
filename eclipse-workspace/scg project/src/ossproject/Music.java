@@ -1,13 +1,8 @@
 package ossproject;
 
 import java.io.*;
-import java.net.URL;
-
-import javax.sound.sampled.AudioSystem;
 import javax.swing.JOptionPane;
-
 import javazoom.jl.player.*;
-import ossproject.scg.First;
 
 public class Music extends Thread {
 
@@ -16,8 +11,6 @@ public class Music extends Thread {
 	private File file;
 	private InputStream fis;
 	private BufferedInputStream bis;
-	
-	private URL url;
 
 	public Music(String name, boolean isLoop) {
 
