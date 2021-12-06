@@ -1,41 +1,45 @@
 package ossproject;
+
 import java.io.*;
-import com.sun.tools.javac.Main;
+import java.net.URL;
+
+import javax.sound.sampled.AudioSystem;
+import javax.swing.JOptionPane;
+
 import javazoom.jl.player.*;
+import ossproject.scg.First;
 
 public class Music extends Thread {
-	
+
 	private Player player;
 	private boolean isLoop;
 	private File file;
-	private FileInputStream fis;
+	private InputStream fis;
 	private BufferedInputStream bis;
 	
+	private URL url;
+
 	public Music(String name, boolean isLoop) {
+
 		try {
 			this.isLoop = isLoop;
-			file = new File("C:/Users/leesn/git/scg/eclipse-workspace/scg project/src/music/" + name);
-			fis = new FileInputStream(file);
+			fis = scg.class.getClassLoader().getResourceAsStream("music/" + name);
 			bis = new BufferedInputStream(fis);
 			player = new Player(bis);
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error with " + name);
+			JOptionPane.showMessageDialog(null,"음악 재생이 되지 않습니다.", "Warning!!",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-
-	public int getTime() {
-		if(player == null)
-			return 0;
-		return player.getPosition();
-	}
-	
 	public void close() {
 		isLoop = false;
 		player.close();
 		this.interrupt();
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -45,7 +49,7 @@ public class Music extends Thread {
 				bis = new BufferedInputStream(fis);
 				player = new Player(bis);
 			} while (isLoop);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}

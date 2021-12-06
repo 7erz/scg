@@ -14,14 +14,6 @@ import java.util.Timer;
 import java.awt.*;
 import java.awt.event.*;
 
-//9월 30일 시작
-//자바를 알지 못해 난잡한 코드들로 처리하느라 정리가 불가능한 상황에 왔음
-// 그래서 독학과 GUI 수업을 통해 First란 창을 새로 띄워서 10월 말 다시 코드를 작성했음
-// 일단 시간이 너무 늦은 관계로 밈에 관련된 간단한 선택형 게임을 만들 예정
-// 첫번쨰는 간단한 틀과 화면 전환
-// 두번쨰는 퀴즈들의 내용들과 처리
-// 세번쨰로는 음악과 사운드 추가
-// 마지막으로 기말 전까지 세세한것을 다듬을 것 (밈 관련 게임이라 다듬지 않는것도 생각하고 있음)
 public class scg extends JFrame implements ActionListener {
 	Container c = getContentPane();
 	Font Bold = new Font("궁서체", Font.BOLD, 60);
@@ -35,13 +27,11 @@ public class scg extends JFrame implements ActionListener {
 	FlowLayout flow = new FlowLayout(10, 400, 10);
 	JPanel btnpnl = new JPanel();
 
-	Music baton = new Music("Baton.mp3", false);
-
 	public scg() {
 		super("scg");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		c.setLayout(null);
-		
+		//이미지를 불러올때 JAR 파일에서는 getClass().getClassLoader().getResource()을 사용하여야 함
 		ImageIcon OK = new ImageIcon(getClass().getClassLoader().getResource("Images/004-check.png"));
 		ImageIcon NO = new ImageIcon(getClass().getClassLoader().getResource("Images/003-dislike.png"));
 		//ImageIcon NO = new ImageIcon("Images/003-dislike.png");
@@ -110,7 +100,6 @@ public class scg extends JFrame implements ActionListener {
 		JPanel fpnl[];
 		JLabel flbl[];
 		JButton fbtn[];
-		JTextField nametxt;
 		// 인게임 패널, 라벨, 버튼 지정
 		JPanel gpnl[];
 		JLabel glbl[];
@@ -118,12 +107,11 @@ public class scg extends JFrame implements ActionListener {
 		// 문제 랜덤으로 제공하기
 		Random rd = new Random();
 		// 여기서
-		String[] quiz = new String[14]; // 문제리스트 참고해서 다시 올릴것
-		String[] c1 = new String[14]; // 1번 문항
-		String[] c2 = new String[14]; // 2번 문항
-		String[] c3 = new String[14]; // 3번 문항(할수 있으면 추가)
-		int[] ans = new int[14]; // 정답의 갯수
-		// https://seoneu.tistory.com/10 사진 배열
+		String[] quiz = new String[15]; // 문제리스트 참고해서 다시 올릴것
+		String[] c1 = new String[15]; // 1번 문항
+		String[] c2 = new String[15]; // 2번 문항
+		String[] c3 = new String[15]; // 3번 문항(할수 있으면 추가)
+		int[] ans = new int[15]; // 정답의 갯수
 		ImageIcon[] pic = { new ImageIcon(getClass().getClassLoader().getResource("Images/0.png")), // [0]
 				new ImageIcon(getClass().getClassLoader().getResource("Images/1.jpg")), // [1]
 				new ImageIcon(getClass().getClassLoader().getResource("Images/2.jpg")), // [2]
@@ -138,25 +126,24 @@ public class scg extends JFrame implements ActionListener {
 				new ImageIcon(getClass().getClassLoader().getResource("Images/11.jpg")), // [11]
 				new ImageIcon(getClass().getClassLoader().getResource("Images/12.jpg")), // [12]
 				new ImageIcon(getClass().getClassLoader().getResource("Images/13.jpg")),// [13]
+				new ImageIcon(getClass().getClassLoader().getResource("Images/14.jpg"))// [14]
 		};
 		// 여기까지 문제가 증가할때마다 수정 해야함
-
-		int ran = rd.nextInt(quiz.length);
-		int answer = 0;
-		int life = 3;
-		int score;
+		// 게임내부 함수들
+		int ran = rd.nextInt(quiz.length); //랜덤으로 문제를 돌림 (복원 추출)
+		int answer = 0; //정답
+		int life = 3; //생명
+		int score; //점수
 
 		ImageIcon lobbyimg = new ImageIcon(getClass().getClassLoader().getResource("Images/gamelogo.png"));
 		// LGPL라이센스 JLayer
-		Music lobby = new Music("LOBBY.mp3", true);
-		Music ingame = new Music("Ingame.mp3", true);
+		Music lobby = new Music("LOBBY.mp3", true); //메인메뉴 음악
+		Music ingame = new Music("Ingame.mp3", true); //게임내부 음악
 
 		First() {
 			super("시작");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
-			// 이 코드는 의미 없는것(패널에서 색을 받아 처리하면 되기 때문)
-			// c.setBackground(red);
 			// 윗창 없애기
 			setUndecorated(true);
 			// 게임 로비 설정
@@ -183,6 +170,7 @@ public class scg extends JFrame implements ActionListener {
 			quiz[11] = "징기스칸은?"; // c3
 			quiz[12] = "고구려의 역사는?"; // c1
 			quiz[13] = "홍콩의 독립은?"; // c2
+			quiz[14] = "비트코인은?"; // c3
 			// 선텍지 1번
 			c1[0] = "미국의 우방국";
 			c1[1] = "천안문 6.4 항쟁";
@@ -198,6 +186,7 @@ public class scg extends JFrame implements ActionListener {
 			c1[11] = "몽골인";
 			c1[12] = "중국 한나라의 역사"; // 정답
 			c1[13] = "독립해야 한다.";
+			c1[14] = "떡상 가즈아!";
 			// 선택지 2번
 			c2[0] = "중화인민공화국"; // 정답
 			c2[1] = "아무 일이 없었습니다."; // 정답
@@ -213,6 +202,7 @@ public class scg extends JFrame implements ActionListener {
 			c2[11] = "러시아인";
 			c2[12] = "한국 삼국사 역사";
 			c2[13] = "하나의 중국을 위해 편입"; // 정답
+			c2[14] = "당은 무슨 코인이 최고지";
 			// 선택지 3번
 			c3[0] = "대만";
 			c3[1] = "진압 당한 그 사건?";
@@ -228,6 +218,7 @@ public class scg extends JFrame implements ActionListener {
 			c3[11] = "중국인"; // 정답
 			c3[12] = "러시아 슬라브족 역사";
 			c3[13] = "아직 영국땅 아닌가?";
+			c3[14] = "디지털 위안화를 위해 멀리하자";
 			// 정답리스트
 			ans[0] = 2;
 			ans[1] = 2;
@@ -243,6 +234,7 @@ public class scg extends JFrame implements ActionListener {
 			ans[11] = 3;
 			ans[12] = 1;
 			ans[13] = 2;
+			ans[14] = 3;
 
 			answer = ans[ran]; // 위치 확인 바람
 
@@ -252,7 +244,6 @@ public class scg extends JFrame implements ActionListener {
 		}
 
 		void setComp() {
-			nametxt = new JTextField(7);
 			fpnl = new JPanel[5];
 			flbl = new JLabel[5];
 			fbtn = new JButton[2];
@@ -260,9 +251,9 @@ public class scg extends JFrame implements ActionListener {
 				fpnl[i] = new JPanel();
 				flbl[i] = new JLabel();
 				if (i < 2) {
-					fbtn[i] = new JButton();
+					fbtn[i] = new JButton(); //순선대로 버튼 추가, 사이즈, 폰트 
 					fbtn[i].setPreferredSize(new Dimension(300, 180));
-					fbtn[i].setFont(new Font("맑은고딕", Font.BOLD, 16));
+					fbtn[i].setFont(new Font("맑은고딕", Font.BOLD, 32));
 				}
 
 			}
@@ -281,10 +272,6 @@ public class scg extends JFrame implements ActionListener {
 			// 로고라벨을 패널0에 추가
 			fpnl[0].add(flbl[1]);
 			fpnl[0].setBackground(Color.RED);
-			// 이름 칸을 패널1에 추가
-			fpnl[1].add(new Label("성함"));
-			fpnl[1].add(nametxt);
-			fpnl[1].setBackground(Color.RED);
 			// 버튼 추가
 			fpnl[2].setBackground(Color.red);
 			fpnl[2].add(fbtn[0]);
@@ -325,7 +312,7 @@ public class scg extends JFrame implements ActionListener {
 				if (e.getSource() == fbtn[1]) {
 					// 새창(패널티창)을 띄우고 경고문을 추가로 띄움
 					new PenaltyImage();
-					JOptionPane.showMessageDialog(null, nametxt.getText() + "동지 교육을 똑바로 들으시오!", "Warning!!",
+					JOptionPane.showMessageDialog(null, "동지 교육을 똑바로 들으시오!", "Warning!!",
 							JOptionPane.ERROR_MESSAGE);
 
 				}
@@ -343,15 +330,14 @@ public class scg extends JFrame implements ActionListener {
 				gbtn[i].setPreferredSize(new Dimension(300, 180));
 				gbtn[i].setFont(new Font("맑은고딕", Font.BOLD, 16));
 			}
+			//문제를 랜덤으로 내었음
 			gpnl[2].setLayout(new FlowLayout());
 			glbl[0].setText("문제: " + quiz[ran]);
 			glbl[0].setFont(new Font("궁서체", Font.BOLD, 40));
 			glbl[1].setIcon(pic[ran]);
-			// 현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
 			gbtn[0].setText("1번: " + c1[ran]);
 			gbtn[1].setText("2번: " + c2[ran]);
 			gbtn[2].setText("3번: " + c3[ran]);
-
 		}
 
 		void addGameComp() {
@@ -374,7 +360,6 @@ public class scg extends JFrame implements ActionListener {
 			gpnl[2].add(gbtn[2], FlowLayout.RIGHT);
 			gpnl[2].setBackground(Color.red);
 		}
-
 		// 정답과 오답 리스터 처리
 		void addGameEvent() {
 			gbtn[0].addActionListener(new CorrectHandler());
@@ -387,7 +372,8 @@ public class scg extends JFrame implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 				// ran=문제번호
-				// gbtn[0] gbtn[0] gbtn[0]
+				// 문제 사진
+				// gbtn[1] gbtn[2] gbtn[3]
 				// ans[ran]=2
 				if (e.getSource() == gbtn[ans[ran] - 1]) {
 					score = score + 1;
@@ -395,7 +381,6 @@ public class scg extends JFrame implements ActionListener {
 					ran = rd.nextInt(ans.length);
 					glbl[0].setText("문제: " + quiz[ran]);
 					glbl[1].setIcon(pic[ran]);
-					// 현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
 					gbtn[0].setText("1번: " + c1[ran]);
 					gbtn[1].setText("2번: " + c2[ran]);
 					gbtn[2].setText("3번: " + c3[ran]);
@@ -406,11 +391,9 @@ public class scg extends JFrame implements ActionListener {
 						ran = rd.nextInt(ans.length);
 						glbl[0].setText("문제: " + quiz[ran]);
 						glbl[1].setIcon(pic[ran]);
-						// 현재는 텍스트형 버튼이지만 다듬을떄 시간있으면 사진 넣어볼것
 						gbtn[0].setText("1번: " + c1[ran]);
 						gbtn[1].setText("2번: " + c2[ran]);
 						gbtn[2].setText("3번: " + c3[ran]);
-
 					}
 					if (life == 0) {
 						setVisible(false);
@@ -676,7 +659,8 @@ public class scg extends JFrame implements ActionListener {
 				+ "d) Do one of the following:\r\n"
 				+ "0) Convey the Minimal Corresponding Source under the terms of this License, and the Corresponding Application Code in a form suitable for, and under terms that permit, the user to recombine or relink the Application with a modified version of the Linked Version to produce a modified Combined Work, in the manner specified by section 6 of the GNU GPL for conveying Corresponding Source.\r\n"
 				+ "1) Use a suitable shared library mechanism for linking with the Library. A suitable mechanism is one that (a) uses at run time a copy of the Library already present on the user's computer system, and (b) will operate properly with a modified version of the Library that is interface-compatible with the Linked Version.\r\n"
-				+ "e) Provide Installation Information, but only if you would otherwise be required to provide such information under section 6 of the GNU GPL, and only to the extent that such information is necessary to install and execute a modified version of the Combined Work produced by recombining or relinking the Application with a modified version of the Linked Version. (If you use option 4d0, the Installation Information must accompany the Minimal Corresponding Source and Corresponding Application Code. If you use option 4d1, you must provide the Installation Information in the manner specified by section 6 of the GNU GPL for conveying Corresponding Source.)\r\n"
+				+ "e) Provide Installation Information, but only if you would otherwise be required to provide such information under section 6 of the GNU GPL, and only to the extent that such information is necessary to install and execute a modified version of the Combined Work produced by recombining or relinking the Application with a modified version of the Linked Version.\r\n "
+				+ "(If you use option 4d0, the Installation Information must accompany the Minimal Corresponding Source and Corresponding Application Code. If you use option 4d1, you must provide the Installation Information in the manner specified by section 6 of the GNU GPL for conveying Corresponding Source.)\r\n"
 				+ "5. Combined Libraries.\r\n" + "\r\n"
 				+ "You may place library facilities that are a work based on the Library side by side in a single library together with other library facilities that are not Applications and are not covered by this License, and convey such a combined library under terms of your choice, if you do both of the following:\r\n"
 				+ "\r\n"
@@ -685,17 +669,18 @@ public class scg extends JFrame implements ActionListener {
 				+ "6. Revised Versions of the GNU Lesser General Public License.\r\n" + "\r\n"
 				+ "The Free Software Foundation may publish revised and/or new versions of the GNU Lesser General Public License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns.\r\n"
 				+ "\r\n"
-				+ "Each version is given a distinguishing version number. If the Library as you received it specifies that a certain numbered version of the GNU Lesser General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that published version or of any later version published by the Free Software Foundation. If the Library as you received it does not specify a version number of the GNU Lesser General Public License, you may choose any version of the GNU Lesser General Public License ever published by the Free Software Foundation.\r\n"
+				+ "Each version is given a distinguishing version number. If the Library as you received it specifies that a certain numbered version of the GNU Lesser General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that published version or of any later version published by the Free Software Foundation.\r\n "
+				+ "If the Library as you received it does not specify a version number of the GNU Lesser General Public License, you may choose any version of the GNU Lesser General Public License ever published by the Free Software Foundation.\r\n"
 				+ "\r\n"
 				+ "If the Library as you received it specifies that a proxy can decide whether future versions of the GNU Lesser General Public License shall apply, that proxy's public statement of acceptance of any version is permanent authorization for you to choose that version for the Library.",
-				30, 100);
+				35, 110);
 		JScrollPane oslsp = new JScrollPane(oslta);
 		JPanel oslpnl = new JPanel();
 
 		OSL() {
 			super("Open Source License");
 
-			// setOSLComp();
+			setOSLComp();
 			addOSLComp();
 
 			setSize(1280, 720);
@@ -703,12 +688,14 @@ public class scg extends JFrame implements ActionListener {
 			setLocationRelativeTo(null);
 		}
 
-//		void setOSLComp() {
-//			
-//		}
+		void setOSLComp() {
+			oslta.setEnabled(false);
+			oslta.setBackground(Color.gray);
+		}
 		void addOSLComp() {
 			add(oslpnl, BorderLayout.CENTER);
 			oslpnl.add(oslsp);
+			oslpnl.setBackground(Color.BLACK);
 
 		}
 	}
